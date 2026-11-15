@@ -69,6 +69,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 ├── jobs/        # Definição exportada do Job do Databricks (JSON)
 └── notebooks/   # Notebooks do pipeline numerados por ordem de execução
 ```
+---
 
 ## ▶️ Como Reproduzir
 
@@ -77,6 +78,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 3. Na aba **Workflows / Jobs**, crie um novo Job utilizando a definição exportada em `jobs/pipeline_camara_bancada_es.json` (ou encadeie as 5 tasks manualmente).
 4. Execute o Job para popular todas as camadas end-to-end.
 
+---
 
 ## 🚀 Próximos Passos
 
