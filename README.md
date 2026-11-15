@@ -39,6 +39,14 @@ Os dados são estruturados e governados no **Unity Catalog** sob o schema `dados
 
 ---
 
+### 🔍 Auditoria de Dados: Bruto vs. Líquido (O Efeito dos Estornos)
+Durante a validação analítica da camada Gold, identificou-se que a fórmula contábil tradicional ($\text{Valor Bruto} - \text{Valor Glosado} = \text{Valor Líquido}$) não resulta no valor líquido final. 
+
+* **Causa Raiz:** A diferença de quase R$ 6 milhões na bancada é explicada por **lançamentos compensatórios, estornos e bilhetes aéreos cancelados/reembolsados**. Na API da Câmara, os estornos entram como valores negativos que reduzem o saldo líquido consumido da cota.
+* **Impacto no Projeto:** O pipeline trata corretamente essa dinâmica na camada Silver/Gold, garantindo que o `valor_liquido` reflita o impacto orçamentário real sem distorcer o volume bruto de emissão de notas.
+
+---
+
 ## ⚙️ Orquestração (Databricks Jobs)
 O pipeline é totalmente automatizado por meio de um Job orquestrado no Databricks (`pipeline_camara_bancada_es`), composto por 5 tasks sequenciais:
 
