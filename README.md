@@ -52,7 +52,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 
 ## 📂 Estrutura do Repositório
 
-```text
+
 ├── docs/        # Prints de execução, GIFs e recursos visuais
 ├── jobs/        # Definição exportada do Job do Databricks (JSON)
 └── notebooks/   # Notebooks do pipeline numerados por ordem de execução
