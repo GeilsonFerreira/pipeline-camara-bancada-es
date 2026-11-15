@@ -36,7 +36,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 | `despesas_deputados_es` | `02_despesas_extract_lote.py` | Ingestão paginada em lote de todas as despesas (2023–2026). |
 | `normaliza_deputados_es` | `03_silver_transform_deputados.py` | Limpeza cadastral e tipagem em PySpark. |
 | `normaliza_despesas_deputados_es` | `04_silver_transform_despesas.py` | Tratamento financeiro, conversão de datas e deduplicação. |
-| `despesas_deputados_es_final` | `05_gold_analytics_despesas.py` | Modelagem dimensional e agregações em Spark SQL. |
+| `despesas_deputados_es_final` | `05_gold_analytics_despesas.py` | Agregações analíticas e consolidação financeira em Spark SQL. |
 
 ![Job no Databricks](docs/job_databricks.jpg)
 
