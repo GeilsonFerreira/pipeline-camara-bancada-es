@@ -58,16 +58,16 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 └── notebooks/   # Notebooks do pipeline numerados por ordem de execução
 ```
 
----
 ## 🚀 Próximos Passos
 
-- [ ] Construir dashboard interativo no Databricks com gastos por deputado e categoria de despesa[span_7](start_span)[span_7](end_span)
-- [ ] Adicionar testes automatizados de qualidade de dados (*Data Quality*) na camada Silver[span_8](start_span)[span_8](end_span)[span_9](start_span)[span_9](end_span)
-- [ ] Ingerir proposições de leis apresentadas por cada parlamentar[span_10](start_span)[span_10](end_span)
-- [ ] Mapear votações nominais da bancada capixaba[span_11](start_span)[span_11](end_span)
+- [ ] Construir dashboard interativo no Databricks com gastos por deputado e categoria de despesa
+- [ ] Adicionar testes automatizados de qualidade de dados (*Data Quality*) na camada Silver
+- [ ] Ingerir proposições de leis apresentadas por cada parlamentar
+- [ ] Mapear votações nominais da bancada capixaba
+
+---
 
 ## 👤 Autor
 
-**Geilson Ferreira** — Jornalista, historiador e engenheiro de dados em transição de carreira, unindo investigação e transparência pública à arquitetura moderna de dados[span_12](start_span)[span_12](end_span).  
-🔗 [Conecte-se comigo no LinkedIn](https://www.linkedin.com/in/geilson-ferreira)[span_13](start_span)[span_13](end_span)
-
+**Geilson Ferreira** — Jornalista, historiador e engenheiro de dados em transição de carreira, unindo investigação e transparência pública à arquitetura moderna de dados.  
+🔗 [Conecte-se comigo no LinkedIn](https://www.linkedin.com/in/geilson-ferreira)
