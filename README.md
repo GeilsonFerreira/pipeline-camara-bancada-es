@@ -27,6 +27,18 @@ Os dados são estruturados e governados no **Unity Catalog** sob o schema `dados
 
 ---
 
+### 📊 Amostra dos Resultados (Top 5 Gastos Líquidos — 2023 a 2026)
+
+| Deputado | Partido | Notas Fiscais | Valor Bruto | Valor Líquido | Ticket Médio |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Paulo Folletto** | PSB | 1.119 | R$ 1.908.570,49 | R$ 1.453.060,45 | R$ 1.298,53 |
+| **Messias Donato** | UNIÃO | 1.314 | R$ 1.899.146,69 | R$ 1.445.612,63 | R$ 1.100,16 |
+| **Gilson Daniel** | PODE | 1.501 | R$ 1.860.421,43 | R$ 1.405.145,75 | R$ 936,14 |
+| **Dr. Victor Linhalis** | PSB | 1.098 | R$ 1.923.559,78 | R$ 1.401.973,15 | R$ 1.276,84 |
+| **Amaro Neto** | PP | 1.119 | R$ 1.837.132,41 | R$ 1.397.012,82 | R$ 1.248,45 |
+
+---
+
 ## ⚙️ Orquestração (Databricks Jobs)
 O pipeline é totalmente automatizado por meio de um Job orquestrado no Databricks (`pipeline_camara_bancada_es`), composto por 5 tasks sequenciais:
 
