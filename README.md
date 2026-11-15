@@ -40,11 +40,11 @@ Os dados são estruturados e governados no **Unity Catalog** sob o schema `dados
 ---
 
 ### 🔍 Auditoria de Dados: Bruto vs. Líquido (O Efeito dos Estornos)
-Durante a validação analítica da camada Gold, identificou-se que a fórmula contábil tradicional (`Valor Bruto - Valor Glosado = Valor Líquido`) não resulta no valor líquido final.
+Durante a validação analítica da camada Gold, identificou-se que a fórmula contábil tradicional (`Valor Bruto - Valor Glosado = Valor Líquido`) não se sustenta de forma direta. 
 
-* **Causa Raiz:** A diferença de quase R$ 6 milhões na bancada é explicada por **lançamentos compensatórios, estornos e bilhetes aéreos cancelados/reembolsados**. Na API da Câmara, os estornos entram como valores negativos que reduzem o saldo líquido consumido da cota.
-* **Impacto no Projeto:** O pipeline trata corretamente essa dinâmica na camada Silver/Gold, garantindo que o `valor_liquido` reflita o impacto orçamentário real sem distorcer o volume bruto de emissão de notas.
-
+* **A Prova Numérica:** Somando toda a bancada, o *Valor Bruto* menos as *Glosas* resulta em **R$ 18,32 milhões**, enquanto o *Valor Líquido* efetivo é de **R$ 12,35 milhões**. A diferença de **R$ 5,97 milhões (32,59% do volume)** não é erro nem glosa oculta.
+* **Causa Raiz:** Essa lacuna de quase R$ 6 milhões é explicada por **lançamentos compensatórios e estornos de bilhetes aéreos**. Na API da Câmara, bilhetes cancelados geram créditos/estornos que abatem o saldo líquido consumido da cota.
+* **Tratamento de Engenharia:** Na camada Gold, aplicamos uma normalização contábil (`valor_liquido * -1`) para que os gastos reais sejam exibidos como valores positivos (facilitando somas em dashboards e gráficos), mantendo os estornos como valores negativos (redutores).
 
 ---
 
