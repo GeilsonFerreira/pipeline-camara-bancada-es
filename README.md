@@ -57,6 +57,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 ├── jobs/        # Definição exportada do Job do Databricks (JSON)
 └── notebooks/   # Notebooks do pipeline numerados por ordem de execução
 
+--- 
 
 ## 🚀 Próximos Passos
 
@@ -65,7 +66,7 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 - [ ] Ingerir proposições de leis apresentadas por cada parlamentar[span_10](start_span)[span_10](end_span)
 - [ ] Mapear votações nominais da bancada capixaba[span_11](start_span)[span_11](end_span)
 
-# 👤 Autor
+## 👤 Autor
 
 **Geilson Ferreira** — Jornalista, historiador e engenheiro de dados em transição de carreira, unindo investigação e transparência pública à arquitetura moderna de dados[span_12](start_span)[span_12](end_span).  
 🔗 [Conecte-se comigo no LinkedIn](https://www.linkedin.com/in/geilson-ferreira)[span_13](start_span)[span_13](end_span)
