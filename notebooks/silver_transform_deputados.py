@@ -15,11 +15,7 @@ df_dep_silver = df_dep_bronze.select(
     col('email').alias('email'),
     col('urlFoto').alias('url_foto')
 ).dropDuplicates(['deputado_id']) \
-.withColumn('data_processamento', current_timestamp())
-
-
-
-# COMMAND ----------
+.withColumn('data_processamento', current_timestamp()
 
 
 #Salvar como tabela Delta na camada Silver
