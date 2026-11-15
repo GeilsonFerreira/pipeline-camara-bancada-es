@@ -1,0 +1,99 @@
+{
+  "name": "pipeline_camara_bancada_es",
+  "description": "Esse pipiline extrai dados da api da Câmara de Deputados e as despesas dos parlamentares",
+  "email_notifications": {
+    "no_alert_for_skipped_runs": false
+  },
+  "webhook_notifications": {},
+  "timeout_seconds": 0,
+  "schedule": {
+    "quartz_cron_expression": "36 0 6 * * ?",
+    "timezone_id": "America/Sao_Paulo",
+    "pause_status": "UNPAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "despesas_deputados_es",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/geilson.ferreira@gmail.com/projeto_espirito_santo/politica/despesas_extract_api_camara",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "nomes_deputados_es",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/geilson.ferreira@gmail.com/projeto_espirito_santo/politica/deputados_extract_api_camara",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "normaliza_deputados_es",
+      "depends_on": [
+        {
+          "task_key": "nomes_deputados_es"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/geilson.ferreira@gmail.com/projeto_espirito_santo/politica/silver_transform_deputados",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "normaliza_despesas_deputados_es",
+      "depends_on": [
+        {
+          "task_key": "despesas_deputados_es"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/geilson.ferreira@gmail.com/projeto_espirito_santo/politica/silver_transform_despesas",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "despesas_deputados_es_final",
+      "depends_on": [
+        {
+          "task_key": "normaliza_deputados_es"
+        },
+        {
+          "task_key": "normaliza_despesas_deputados_es"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/geilson.ferreira@gmail.com/projeto_espirito_santo/politica/gold_analytics_despesas",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    }
+  ],
+  "queue": {
+    "enabled": true
+  },
+  "performance_target": "PERFORMANCE_OPTIMIZED"
+}
