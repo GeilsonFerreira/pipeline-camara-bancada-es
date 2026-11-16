@@ -58,8 +58,6 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 | `normaliza_despesas_deputados_es` | `04_silver_transform_despesas.py` | Tratamento financeiro, conversão de datas e deduplicação. |
 | `despesas_deputados_es_final` | `05_gold_analytics_despesas.py` | Agregações analíticas e consolidação financeira em Spark SQL. |
 
-## 📊 Demonstração do Pipeline
-![Pipeline rodando](docs/pipeline_demo.mp4)
 
 ---
 
