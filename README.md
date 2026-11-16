@@ -5,14 +5,13 @@
 [![Delta Lake](https://img.shields.io/badge/Delta_Lake-00A98F?style=for-the-badge&logo=delta-lake&logoColor=white)](https://delta.io/)
 [![SQL](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
+
 Pipeline de engenharia de dados end-to-end desenvolvido no **Databricks**, responsável por coletar, tratar, auditar e consolidar os dados cadastrais e os gastos de cota parlamentar dos deputados federais do Espírito Santo, utilizando a API de Dados Abertos da Câmara dos Deputados.
 
 > **Pergunta central que o projeto responde:** quanto cada deputado federal capixaba gasta, com o quê e qual o perfil de execução orçamentária da bancada?
 
 ---
-
-## 📊 Demonstração do Pipeline
-![Pipeline rodando](docs/pipeline_demo.gif)
+![Job no Databricks](docs/job_databricks.jpg)
 
 ---
 
@@ -59,7 +58,8 @@ O pipeline é totalmente automatizado por meio de um Job orquestrado no Databric
 | `normaliza_despesas_deputados_es` | `04_silver_transform_despesas.py` | Tratamento financeiro, conversão de datas e deduplicação. |
 | `despesas_deputados_es_final` | `05_gold_analytics_despesas.py` | Agregações analíticas e consolidação financeira em Spark SQL. |
 
-![Job no Databricks](docs/job_databricks.jpg)
+## 📊 Demonstração do Pipeline
+![Pipeline rodando](docs/pipeline_demo.gif)
 
 ---
 
