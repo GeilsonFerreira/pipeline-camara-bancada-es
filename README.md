@@ -11,7 +11,7 @@ Pipeline de engenharia de dados end-to-end desenvolvido no **Databricks**, respo
 > **Pergunta central que o projeto responde:** quanto cada deputado federal capixaba gasta, com o quê e qual o perfil de execução orçamentária da bancada?
 
 ---
-![Job no Databricks](docs/job_databricks.jpg)
+![Job no Databricks](docs/job_databricks.png)
 
 ---
 
