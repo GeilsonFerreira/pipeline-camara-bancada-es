@@ -1,0 +1,708 @@
+{
+  "datasets": [
+    {
+      "name": "c682c556",
+      "displayName": "Untitled dataset",
+      "queryLines": [
+        ""
+      ],
+      "catalog": "dados_es",
+      "schema": "gold"
+    },
+    {
+      "name": "deputados",
+      "displayName": "Deputados (cadastro e foto)",
+      "config": {
+        "version": "1.1",
+        "source": "dados_es.bronze.deputados_raw",
+        "comment": "Cadastro de deputados federais com foto, partido e UF",
+        "dimensions": [
+          {
+            "name": "id",
+            "expr": "id"
+          },
+          {
+            "name": "nome",
+            "expr": "nome"
+          },
+          {
+            "name": "sigla_partido",
+            "expr": "siglaPartido"
+          },
+          {
+            "name": "sigla_uf",
+            "expr": "siglaUf"
+          },
+          {
+            "name": "url_foto",
+            "expr": "urlFoto"
+          }
+        ]
+      }
+    },
+    {
+      "name": "despesas_deputados",
+      "displayName": "Despesas dos deputados",
+      "config": {
+        "source": "dados_es.gold.resumo_despesas_deputado",
+        "measures": [
+          {
+            "name": "gasto_total",
+            "expr": "SUM(valor_total_liquido)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "BRL",
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "gasto_bruto",
+            "expr": "SUM(valor_total_bruto)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "BRL",
+              "abbreviation": "compact"
+            }
+          },
+          {
+            "name": "total_notas",
+            "expr": "SUM(total_notas_fiscais)"
+          }
+        ],
+        "version": "1.1",
+        "comment": "Resumo por deputado das despesas da cota parlamentar",
+        "dimensions": [
+          {
+            "name": "deputado_id",
+            "expr": "deputado_id"
+          },
+          {
+            "name": "nome_deputado",
+            "expr": "nome_deputado"
+          },
+          {
+            "name": "sigla_partido",
+            "expr": "sigla_partido"
+          },
+          {
+            "name": "sigla_uf",
+            "expr": "sigla_uf"
+          }
+        ]
+      }
+    },
+    {
+      "name": "top_deputados_gasto",
+      "displayName": "Top 15 deputados por gasto",
+      "config": {
+        "source": "SELECT deputado_id, nome_deputado, sigla_partido, sigla_uf, valor_total_liquido FROM dados_es.gold.resumo_despesas_deputado ORDER BY valor_total_liquido DESC LIMIT 15",
+        "measures": [
+          {
+            "name": "gasto_total",
+            "expr": "SUM(valor_total_liquido)",
+            "format": {
+              "type": "currency",
+              "currencyCode": "BRL",
+              "abbreviation": "compact"
+            }
+          }
+        ],
+        "version": "1.1",
+        "comment": "Top 15 deputados por gasto líquido total",
+        "dimensions": [
+          {
+            "name": "deputado_id",
+            "expr": "deputado_id"
+          },
+          {
+            "name": "nome_deputado",
+            "expr": "nome_deputado"
+          },
+          {
+            "name": "sigla_partido",
+            "expr": "sigla_partido"
+          },
+          {
+            "name": "sigla_uf",
+            "expr": "sigla_uf"
+          }
+        ]
+      }
+    }
+  ],
+  "relationshipGraphs": [
+    {
+      "sources": [
+        {
+          "name": "Untitled_dataset",
+          "datasetName": "c682c556"
+        },
+        {
+          "name": "Deputados_cadastro_e_foto",
+          "datasetName": "deputados"
+        },
+        {
+          "name": "Despesas_dos_deputados",
+          "datasetName": "despesas_deputados"
+        },
+        {
+          "name": "Top_15_deputados_por_gasto",
+          "datasetName": "top_deputados_gasto"
+        }
+      ],
+      "relationships": [
+        {
+          "name": "relationship_0",
+          "from": "Despesas_dos_deputados",
+          "to": "Deputados_cadastro_e_foto",
+          "on": "`Despesas_dos_deputados`.`deputado_id` = `Deputados_cadastro_e_foto`.`id`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        },
+        {
+          "name": "relationship_1",
+          "from": "Top_15_deputados_por_gasto",
+          "to": "Deputados_cadastro_e_foto",
+          "on": "`Top_15_deputados_por_gasto`.`deputado_id` = `Deputados_cadastro_e_foto`.`id`",
+          "cardinality": "CARDINALITY_MANY_TO_ONE"
+        }
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "3ba9fca4",
+      "displayName": "Untitled page",
+      "layout": [
+        {
+          "widget": {
+            "name": "counter_gasto_total",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Despesas_dos_deputados__gasto_total)",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`gasto_total`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`Despesas_dos_deputados`.`sigla_partido` IN ('PSB')"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Gasto total (cota parlamentar)",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Despesas_dos_deputados__gasto_total)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "BRL",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_notas",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "measure(Despesas_dos_deputados__total_notas)",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`total_notas`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total de notas fiscais",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(Despesas_dos_deputados__total_notas)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    },
+                    "significantFigures": {
+                      "type": "exact",
+                      "figures": 3
+                    }
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_deputados",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "countdistinct(Despesas_dos_deputados__deputado_id)",
+                      "expression": "COUNT(DISTINCT `Despesas_dos_deputados`.`deputado_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Deputados Federais",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(Despesas_dos_deputados__deputado_id)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_gasto_partido",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Despesas_dos_deputados__sigla_partido",
+                      "expression": "`Despesas_dos_deputados`.`sigla_partido`"
+                    },
+                    {
+                      "name": "measure(Despesas_dos_deputados__gasto_total)",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`gasto_total`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`gasto_total`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "# <span style=\"text-align:center;display:block;\">Gasto por partido</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "layout": "group"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Despesas_dos_deputados__sigla_partido",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false,
+                    "labelAngle": 0
+                  },
+                  "displayName": "sigla_partido",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "y-reversed"
+                    }
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(Despesas_dos_deputados__gasto_total)",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false,
+                    "hideGrid": true
+                  },
+                  "displayName": "gasto_total",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "Despesas_dos_deputados__sigla_partido",
+                  "legend": {
+                    "hide": true
+                  },
+                  "formatTemplate": "{{ @formatted }}",
+                  "displayName": "sigla_partido",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "measure",
+                      "measure": {
+                        "fieldName": "measure(Despesas_dos_deputados__gasto_total)"
+                      }
+                    }
+                  }
+                },
+                "label": {
+                  "show": true,
+                  "text": {
+                    "fieldName": "measure(Despesas_dos_deputados__gasto_total)",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "BRL",
+                      "abbreviation": "compact",
+                      "decimalPlaces": {
+                        "type": "max",
+                        "places": 2
+                      },
+                      "significantFigures": {
+                        "type": "exact",
+                        "figures": 3
+                      }
+                    },
+                    "displayName": "gasto_total"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_top_deputados",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Top_15_deputados_por_gasto__nome_deputado",
+                      "expression": "`Top_15_deputados_por_gasto`.`nome_deputado`"
+                    },
+                    {
+                      "name": "measure(Top_15_deputados_por_gasto__gasto_total)",
+                      "expression": "MEASURE(`Top_15_deputados_por_gasto`.`gasto_total`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "# <span style=\"text-align:center;display:block\">Ranking de gasto por deputado</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "layout": "stack"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "measure(Top_15_deputados_por_gasto__gasto_total)",
+                  "axis": {
+                    "hideLabels": true,
+                    "hideGrid": true,
+                    "hideTitle": true,
+                    "labelAngle": 90
+                  },
+                  "formatTemplate": "{{ @formatted }}",
+                  "displayName": "gasto_total",
+                  "scale": {
+                    "type": "quantitative",
+                    "reverse": false
+                  },
+                  "error": {
+                    "type": "absolute"
+                  }
+                },
+                "y": {
+                  "fieldName": "Top_15_deputados_por_gasto__nome_deputado",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false
+                  },
+                  "displayName": "Deputado",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "Top_15_deputados_por_gasto__nome_deputado",
+                  "legend": {
+                    "hideTitle": true,
+                    "hide": true
+                  },
+                  "displayName": "nome_deputado",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true,
+                  "text": {
+                    "fieldName": "measure(Top_15_deputados_por_gasto__gasto_total)",
+                    "format": {
+                      "type": "number-currency",
+                      "currencyCode": "BRL",
+                      "abbreviation": "compact",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 2
+                      },
+                      "significantFigures": {
+                        "type": "exact",
+                        "figures": 3
+                      }
+                    },
+                    "displayName": "gasto_total"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "filterSources": {
+              "mode": "EXCLUDE",
+              "page": {
+                "names": [
+                  "tabela_deputados"
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "tabela_deputados",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "fields": [
+                    {
+                      "name": "Deputados_cadastro_e_foto__url_foto",
+                      "expression": "`Deputados_cadastro_e_foto`.`url_foto`"
+                    },
+                    {
+                      "name": "Despesas_dos_deputados__nome_deputado",
+                      "expression": "`Despesas_dos_deputados`.`nome_deputado`"
+                    },
+                    {
+                      "name": "Despesas_dos_deputados__sigla_partido",
+                      "expression": "`Despesas_dos_deputados`.`sigla_partido`"
+                    },
+                    {
+                      "name": "Despesas_dos_deputados__sigla_uf",
+                      "expression": "`Despesas_dos_deputados`.`sigla_uf`"
+                    },
+                    {
+                      "name": "measure(Despesas_dos_deputados__gasto_total)",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`gasto_total`)"
+                    },
+                    {
+                      "name": "measure(Despesas_dos_deputados__total_notas)",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`total_notas`)"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "MEASURE(`Despesas_dos_deputados`.`gasto_total`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<p>&nbsp;</p>\n\n## <span style=\"text-align:left;display:block;\"><span style=\"font-size:24px\">Deputados — foto, nome, partido e gasto</span></span>\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "displayRowNumbers": false,
+              "rowsPerPage": 10,
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "Deputados_cadastro_e_foto__url_foto",
+                    "displayName": "Foto",
+                    "style": {
+                      "type": "image",
+                      "urlTemplate": "{{ @ }}",
+                      "height": {
+                        "type": "value",
+                        "value": 66
+                      }
+                    }
+                  },
+                  {
+                    "fieldName": "Despesas_dos_deputados__nome_deputado",
+                    "displayName": "Deputado"
+                  },
+                  {
+                    "fieldName": "Despesas_dos_deputados__sigla_partido",
+                    "displayName": "Partido"
+                  },
+                  {
+                    "fieldName": "Despesas_dos_deputados__sigla_uf",
+                    "displayName": "UF"
+                  },
+                  {
+                    "fieldName": "measure(Despesas_dos_deputados__gasto_total)",
+                    "format": {
+                      "abbreviation": "none",
+                      "currencyCode": "BRL",
+                      "type": "number-currency",
+                      "decimalPlaces": {
+                        "places": 2,
+                        "type": "exact"
+                      }
+                    },
+                    "displayName": "Gasto total"
+                  },
+                  {
+                    "fieldName": "measure(Despesas_dos_deputados__total_notas)",
+                    "displayName": "Notas fiscais"
+                  }
+                ],
+                "rowOrder": [
+                  {
+                    "by": "column-reversed",
+                    "field": {
+                      "index": 4
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 16
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "locale": "pt-BR",
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
